@@ -34,11 +34,16 @@ class Alarm {
 
   static final _ringing = BehaviorSubject<AlarmSet>.seeded(AlarmSet.empty());
 
+  static final _stopped = BehaviorSubject<int>.seeded(-1);
+
   /// Stream of the scheduled alarms.
   static ValueStream<AlarmSet> get scheduled => _scheduled.stream;
 
   /// Stream of the ringing alarms.
   static ValueStream<AlarmSet> get ringing => _ringing.stream;
+
+  /// Stream of the stopped alarms.
+  static ValueStream<int> get stopped => _stopped.stream;
 
   /// Stream of the alarm updates.
   @Deprecated('Use [scheduled] and [ringing] streams instead.')
@@ -257,6 +262,7 @@ class Alarm {
 
     _scheduled.add(_scheduled.value.removeById(alarmId));
     _ringing.add(_ringing.value.removeById(alarmId));
+    _stopped.add(alarmId);
 
     updateStream.add(alarmId);
   }
